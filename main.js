@@ -1,6 +1,10 @@
-const wrapper = document.querySelector(".wrapper");
-const searchInput = wrapper.querySelector("input");
-const infoText = wrapper.querySelector(".info-text");
+const wrapper = document.querySelector(".wrapper"),
+  searchInput = wrapper.querySelector("input"),
+  volume = wrapper.querySelector(".word i"),
+  infoText = wrapper.querySelector(".info-text"),
+  synonyms = wrapper.querySelector(".synonyms .list"),
+  removeIcon = wrapper.querySelector(".search span");
+let audio;
 
 function data(result, word) {
   if (result.title) {
@@ -14,6 +18,7 @@ function data(result, word) {
     document.querySelector(".meaning span").innerText = definitions.definition;
     document.querySelector(".example span").innerText = definitions.example;
     audio = new Audio("https:" + result[0].phonetics[0].audio);
+
     if (definitions.synonyms[0] == undefined) {
       synonyms.parentElement.style.display = "none";
     } else {
@@ -56,4 +61,21 @@ searchInput.addEventListener("keyup", (e) => {
   if (e.key == "Enter" && word) {
     fetchApi(word);
   }
+});
+
+volume.addEventListener("click", () => {
+  volume.style.color = "#4D59FB";
+  audio.play();
+  setTimeout(() => {
+    volume.style.color = "#999";
+  }, 800);
+});
+
+removeIcon.addEventListener("click", () => {
+  searchInput.value = "";
+  searchInput.focus();
+  wrapper.classList.remove("active");
+  infoText.style.color = "#9A9A9A";
+  infoText.innerHTML =
+    "Type any existing word and press enter to get meaning, example, synonyms, etc.";
 });
